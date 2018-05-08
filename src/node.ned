@@ -6,7 +6,10 @@ package d2dcommunication;
 //
 simple Node
 {
+    parameters:
+        int size = default(10);
     gates:
-        input in;
-        output out;
+        input in[size];
+        output out[size];
+        inout register;
 }

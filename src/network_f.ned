@@ -19,21 +19,32 @@ package d2dcommunication;
 //
 network final_net
 {
+    parameters:
+        int size = default(10);
+        n[*].size = size;
     submodules:       
-        n[20] : Node
+        n[size] : Node
         {
-            @display("p=100,100,ri,100,100");
+            //@display("p=100,100,ri,100,100");
         };
         enb    : Enb
         {
-            @display("p=200,200");
+            //@display("p=200,200");
         };
+        //ac : Node;
         
     connections:
-        for i = 0..19
+        for i = 0..(size - 1)
         {
-            n[i].in  <-- { delay = uniform(10ms, 100ms); } <-- enb.out[i];
-        	n[i].out --> { delay = uniform(10ms, 100ms); } --> enb.in[i];
+            n[i].in[0]  <-- { delay = uniform(10us, 100us); } <-- enb.out[i];
+        	n[i].out[0] --> { delay = uniform(10us, 100us); } --> enb.in[i];
+        	n[i].register <--> enb.register[i];
+        }
+        
+        for i = 0..(size - 1), for j = 0..(size - 1), if i != j
+        {
+            n[i].in++ <-- { delay = uniform(10us, 100us); } <-- n[j].out++;
+            n[i].out++ --> { delay = uniform(10us, 100us); } --> n[j].in++;
         }
         
 }

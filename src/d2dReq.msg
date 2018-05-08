@@ -16,7 +16,7 @@
 //
 // TODO generated message class
 //
-
-packet File_req {
-    int requestedFile;
+message D2dReq {
+    int userId;
+    int fileId;
 }

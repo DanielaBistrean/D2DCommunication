@@ -14,6 +14,12 @@ class Node : public cSimpleModule
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+
+  private:
+    int status[3];
+    static int count;
+    int id;
+    int x, y;
 };
 
 #endif

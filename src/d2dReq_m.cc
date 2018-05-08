@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.3 from file_req.msg.
+// Generated file, do not edit! Created by nedtool 5.3 from d2dReq.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -26,7 +26,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "file_req_m.h"
+#include "d2dReq_m.h"
 
 namespace omnetpp {
 
@@ -177,64 +177,78 @@ inline std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec)
     return out;
 }
 
-Register_Class(File_req)
+Register_Class(D2dReq)
 
-File_req::File_req(const char *name, short kind) : ::omnetpp::cPacket(name,kind)
+D2dReq::D2dReq(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
 {
-    this->requestedFile = 0;
+    this->userId = 0;
+    this->fileId = 0;
 }
 
-File_req::File_req(const File_req& other) : ::omnetpp::cPacket(other)
+D2dReq::D2dReq(const D2dReq& other) : ::omnetpp::cMessage(other)
 {
     copy(other);
 }
 
-File_req::~File_req()
+D2dReq::~D2dReq()
 {
 }
 
-File_req& File_req::operator=(const File_req& other)
+D2dReq& D2dReq::operator=(const D2dReq& other)
 {
     if (this==&other) return *this;
-    ::omnetpp::cPacket::operator=(other);
+    ::omnetpp::cMessage::operator=(other);
     copy(other);
     return *this;
 }
 
-void File_req::copy(const File_req& other)
+void D2dReq::copy(const D2dReq& other)
 {
-    this->requestedFile = other.requestedFile;
+    this->userId = other.userId;
+    this->fileId = other.fileId;
 }
 
-void File_req::parsimPack(omnetpp::cCommBuffer *b) const
+void D2dReq::parsimPack(omnetpp::cCommBuffer *b) const
 {
-    ::omnetpp::cPacket::parsimPack(b);
-    doParsimPacking(b,this->requestedFile);
+    ::omnetpp::cMessage::parsimPack(b);
+    doParsimPacking(b,this->userId);
+    doParsimPacking(b,this->fileId);
 }
 
-void File_req::parsimUnpack(omnetpp::cCommBuffer *b)
+void D2dReq::parsimUnpack(omnetpp::cCommBuffer *b)
 {
-    ::omnetpp::cPacket::parsimUnpack(b);
-    doParsimUnpacking(b,this->requestedFile);
+    ::omnetpp::cMessage::parsimUnpack(b);
+    doParsimUnpacking(b,this->userId);
+    doParsimUnpacking(b,this->fileId);
 }
 
-int File_req::getRequestedFile() const
+int D2dReq::getUserId() const
 {
-    return this->requestedFile;
+    return this->userId;
 }
 
-void File_req::setRequestedFile(int requestedFile)
+void D2dReq::setUserId(int userId)
 {
-    this->requestedFile = requestedFile;
+    this->userId = userId;
 }
 
-class File_reqDescriptor : public omnetpp::cClassDescriptor
+int D2dReq::getFileId() const
+{
+    return this->fileId;
+}
+
+void D2dReq::setFileId(int fileId)
+{
+    this->fileId = fileId;
+}
+
+class D2dReqDescriptor : public omnetpp::cClassDescriptor
 {
   private:
     mutable const char **propertynames;
   public:
-    File_reqDescriptor();
-    virtual ~File_reqDescriptor();
+    D2dReqDescriptor();
+    virtual ~D2dReqDescriptor();
 
     virtual bool doesSupport(omnetpp::cObject *obj) const override;
     virtual const char **getPropertyNames() const override;
@@ -256,24 +270,24 @@ class File_reqDescriptor : public omnetpp::cClassDescriptor
     virtual void *getFieldStructValuePointer(void *object, int field, int i) const override;
 };
 
-Register_ClassDescriptor(File_reqDescriptor)
+Register_ClassDescriptor(D2dReqDescriptor)
 
-File_reqDescriptor::File_reqDescriptor() : omnetpp::cClassDescriptor("File_req", "omnetpp::cPacket")
+D2dReqDescriptor::D2dReqDescriptor() : omnetpp::cClassDescriptor("D2dReq", "omnetpp::cMessage")
 {
     propertynames = nullptr;
 }
 
-File_reqDescriptor::~File_reqDescriptor()
+D2dReqDescriptor::~D2dReqDescriptor()
 {
     delete[] propertynames;
 }
 
-bool File_reqDescriptor::doesSupport(omnetpp::cObject *obj) const
+bool D2dReqDescriptor::doesSupport(omnetpp::cObject *obj) const
 {
-    return dynamic_cast<File_req *>(obj)!=nullptr;
+    return dynamic_cast<D2dReq *>(obj)!=nullptr;
 }
 
-const char **File_reqDescriptor::getPropertyNames() const
+const char **D2dReqDescriptor::getPropertyNames() const
 {
     if (!propertynames) {
         static const char *names[] = {  nullptr };
@@ -284,19 +298,19 @@ const char **File_reqDescriptor::getPropertyNames() const
     return propertynames;
 }
 
-const char *File_reqDescriptor::getProperty(const char *propertyname) const
+const char *D2dReqDescriptor::getProperty(const char *propertyname) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     return basedesc ? basedesc->getProperty(propertyname) : nullptr;
 }
 
-int File_reqDescriptor::getFieldCount() const
+int D2dReqDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 1+basedesc->getFieldCount() : 1;
+    return basedesc ? 2+basedesc->getFieldCount() : 2;
 }
 
-unsigned int File_reqDescriptor::getFieldTypeFlags(int field) const
+unsigned int D2dReqDescriptor::getFieldTypeFlags(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -306,11 +320,12 @@ unsigned int File_reqDescriptor::getFieldTypeFlags(int field) const
     }
     static unsigned int fieldTypeFlags[] = {
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<1) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
 }
 
-const char *File_reqDescriptor::getFieldName(int field) const
+const char *D2dReqDescriptor::getFieldName(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -319,20 +334,22 @@ const char *File_reqDescriptor::getFieldName(int field) const
         field -= basedesc->getFieldCount();
     }
     static const char *fieldNames[] = {
-        "requestedFile",
+        "userId",
+        "fileId",
     };
-    return (field>=0 && field<1) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<2) ? fieldNames[field] : nullptr;
 }
 
-int File_reqDescriptor::findField(const char *fieldName) const
+int D2dReqDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     int base = basedesc ? basedesc->getFieldCount() : 0;
-    if (fieldName[0]=='r' && strcmp(fieldName, "requestedFile")==0) return base+0;
+    if (fieldName[0]=='u' && strcmp(fieldName, "userId")==0) return base+0;
+    if (fieldName[0]=='f' && strcmp(fieldName, "fileId")==0) return base+1;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
-const char *File_reqDescriptor::getFieldTypeString(int field) const
+const char *D2dReqDescriptor::getFieldTypeString(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -342,11 +359,12 @@ const char *File_reqDescriptor::getFieldTypeString(int field) const
     }
     static const char *fieldTypeStrings[] = {
         "int",
+        "int",
     };
-    return (field>=0 && field<1) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<2) ? fieldTypeStrings[field] : nullptr;
 }
 
-const char **File_reqDescriptor::getFieldPropertyNames(int field) const
+const char **D2dReqDescriptor::getFieldPropertyNames(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -359,7 +377,7 @@ const char **File_reqDescriptor::getFieldPropertyNames(int field) const
     }
 }
 
-const char *File_reqDescriptor::getFieldProperty(int field, const char *propertyname) const
+const char *D2dReqDescriptor::getFieldProperty(int field, const char *propertyname) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -372,7 +390,7 @@ const char *File_reqDescriptor::getFieldProperty(int field, const char *property
     }
 }
 
-int File_reqDescriptor::getFieldArraySize(void *object, int field) const
+int D2dReqDescriptor::getFieldArraySize(void *object, int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -380,13 +398,13 @@ int File_reqDescriptor::getFieldArraySize(void *object, int field) const
             return basedesc->getFieldArraySize(object, field);
         field -= basedesc->getFieldCount();
     }
-    File_req *pp = (File_req *)object; (void)pp;
+    D2dReq *pp = (D2dReq *)object; (void)pp;
     switch (field) {
         default: return 0;
     }
 }
 
-const char *File_reqDescriptor::getFieldDynamicTypeString(void *object, int field, int i) const
+const char *D2dReqDescriptor::getFieldDynamicTypeString(void *object, int field, int i) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -394,13 +412,13 @@ const char *File_reqDescriptor::getFieldDynamicTypeString(void *object, int fiel
             return basedesc->getFieldDynamicTypeString(object,field,i);
         field -= basedesc->getFieldCount();
     }
-    File_req *pp = (File_req *)object; (void)pp;
+    D2dReq *pp = (D2dReq *)object; (void)pp;
     switch (field) {
         default: return nullptr;
     }
 }
 
-std::string File_reqDescriptor::getFieldValueAsString(void *object, int field, int i) const
+std::string D2dReqDescriptor::getFieldValueAsString(void *object, int field, int i) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -408,14 +426,15 @@ std::string File_reqDescriptor::getFieldValueAsString(void *object, int field, i
             return basedesc->getFieldValueAsString(object,field,i);
         field -= basedesc->getFieldCount();
     }
-    File_req *pp = (File_req *)object; (void)pp;
+    D2dReq *pp = (D2dReq *)object; (void)pp;
     switch (field) {
-        case 0: return long2string(pp->getRequestedFile());
+        case 0: return long2string(pp->getUserId());
+        case 1: return long2string(pp->getFileId());
         default: return "";
     }
 }
 
-bool File_reqDescriptor::setFieldValueAsString(void *object, int field, int i, const char *value) const
+bool D2dReqDescriptor::setFieldValueAsString(void *object, int field, int i, const char *value) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -423,14 +442,15 @@ bool File_reqDescriptor::setFieldValueAsString(void *object, int field, int i, c
             return basedesc->setFieldValueAsString(object,field,i,value);
         field -= basedesc->getFieldCount();
     }
-    File_req *pp = (File_req *)object; (void)pp;
+    D2dReq *pp = (D2dReq *)object; (void)pp;
     switch (field) {
-        case 0: pp->setRequestedFile(string2long(value)); return true;
+        case 0: pp->setUserId(string2long(value)); return true;
+        case 1: pp->setFileId(string2long(value)); return true;
         default: return false;
     }
 }
 
-const char *File_reqDescriptor::getFieldStructName(int field) const
+const char *D2dReqDescriptor::getFieldStructName(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -443,7 +463,7 @@ const char *File_reqDescriptor::getFieldStructName(int field) const
     };
 }
 
-void *File_reqDescriptor::getFieldStructValuePointer(void *object, int field, int i) const
+void *D2dReqDescriptor::getFieldStructValuePointer(void *object, int field, int i) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -451,7 +471,7 @@ void *File_reqDescriptor::getFieldStructValuePointer(void *object, int field, in
             return basedesc->getFieldStructValuePointer(object, field, i);
         field -= basedesc->getFieldCount();
     }
-    File_req *pp = (File_req *)object; (void)pp;
+    D2dReq *pp = (D2dReq *)object; (void)pp;
     switch (field) {
         default: return nullptr;
     }

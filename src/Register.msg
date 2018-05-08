@@ -13,23 +13,12 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-cplusplus 
-{{
-    typedef struct _payload
-    {
-        int fileId; 		     //if file request
-        char fileData[4096]; 	// if file data response
-        
-    } payload;
-}}
+//
+// TODO generated message class
+//
+message Register {
+    int x;
+    int y;
+    int senderId;
 
-class noncobject payload;
- 
-packet Data_packet {
-    bool isRequest;
-    int sequenceNumber;
-    int type;
-    int senderID;
-    int size;
-    payload data;
 }

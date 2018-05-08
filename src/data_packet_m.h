@@ -36,6 +36,7 @@
  *     int sequenceNumber;
  *     int type;
  *     int senderID;
+ *     int size;
  *     payload data;
  * }
  * </pre>
@@ -47,6 +48,7 @@ class Data_packet : public ::omnetpp::cPacket
     int sequenceNumber;
     int type;
     int senderID;
+    int size;
     payload data;
 
   private:
@@ -74,6 +76,8 @@ class Data_packet : public ::omnetpp::cPacket
     virtual void setType(int type);
     virtual int getSenderID() const;
     virtual void setSenderID(int senderID);
+    virtual int getSize() const;
+    virtual void setSize(int size);
     virtual payload& getData();
     virtual const payload& getData() const {return const_cast<Data_packet*>(this)->getData();}
     virtual void setData(const payload& data);

@@ -7,6 +7,7 @@ package d2dcommunication;
 simple Enb
 {
     gates:
-        input in[20];
-        output out[20];
+        input in[20] @loose;
+        output out[20] @loose;
+        inout register[20] @loose;
 }

@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.3 from data_packet.msg.
+// Generated file, do not edit! Created by nedtool 5.3 from Register.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:
@@ -26,7 +26,7 @@
 
 #include <iostream>
 #include <sstream>
-#include "data_packet_m.h"
+#include "Register_m.h"
 
 namespace omnetpp {
 
@@ -177,133 +177,92 @@ inline std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec)
     return out;
 }
 
-Register_Class(Data_packet)
+Register_Class(Register)
 
-Data_packet::Data_packet(const char *name, short kind) : ::omnetpp::cPacket(name,kind)
+Register::Register(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
 {
-    this->isRequest = false;
-    this->sequenceNumber = 0;
-    this->type = 0;
-    this->senderID = 0;
-    this->size = 0;
+    this->x = 0;
+    this->y = 0;
+    this->senderId = 0;
 }
 
-Data_packet::Data_packet(const Data_packet& other) : ::omnetpp::cPacket(other)
+Register::Register(const Register& other) : ::omnetpp::cMessage(other)
 {
     copy(other);
 }
 
-Data_packet::~Data_packet()
+Register::~Register()
 {
 }
 
-Data_packet& Data_packet::operator=(const Data_packet& other)
+Register& Register::operator=(const Register& other)
 {
     if (this==&other) return *this;
-    ::omnetpp::cPacket::operator=(other);
+    ::omnetpp::cMessage::operator=(other);
     copy(other);
     return *this;
 }
 
-void Data_packet::copy(const Data_packet& other)
+void Register::copy(const Register& other)
 {
-    this->isRequest = other.isRequest;
-    this->sequenceNumber = other.sequenceNumber;
-    this->type = other.type;
-    this->senderID = other.senderID;
-    this->size = other.size;
-    this->data = other.data;
+    this->x = other.x;
+    this->y = other.y;
+    this->senderId = other.senderId;
 }
 
-void Data_packet::parsimPack(omnetpp::cCommBuffer *b) const
+void Register::parsimPack(omnetpp::cCommBuffer *b) const
 {
-    ::omnetpp::cPacket::parsimPack(b);
-    doParsimPacking(b,this->isRequest);
-    doParsimPacking(b,this->sequenceNumber);
-    doParsimPacking(b,this->type);
-    doParsimPacking(b,this->senderID);
-    doParsimPacking(b,this->size);
-    doParsimPacking(b,this->data);
+    ::omnetpp::cMessage::parsimPack(b);
+    doParsimPacking(b,this->x);
+    doParsimPacking(b,this->y);
+    doParsimPacking(b,this->senderId);
 }
 
-void Data_packet::parsimUnpack(omnetpp::cCommBuffer *b)
+void Register::parsimUnpack(omnetpp::cCommBuffer *b)
 {
-    ::omnetpp::cPacket::parsimUnpack(b);
-    doParsimUnpacking(b,this->isRequest);
-    doParsimUnpacking(b,this->sequenceNumber);
-    doParsimUnpacking(b,this->type);
-    doParsimUnpacking(b,this->senderID);
-    doParsimUnpacking(b,this->size);
-    doParsimUnpacking(b,this->data);
+    ::omnetpp::cMessage::parsimUnpack(b);
+    doParsimUnpacking(b,this->x);
+    doParsimUnpacking(b,this->y);
+    doParsimUnpacking(b,this->senderId);
 }
 
-bool Data_packet::getIsRequest() const
+int Register::getX() const
 {
-    return this->isRequest;
+    return this->x;
 }
 
-void Data_packet::setIsRequest(bool isRequest)
+void Register::setX(int x)
 {
-    this->isRequest = isRequest;
+    this->x = x;
 }
 
-int Data_packet::getSequenceNumber() const
+int Register::getY() const
 {
-    return this->sequenceNumber;
+    return this->y;
 }
 
-void Data_packet::setSequenceNumber(int sequenceNumber)
+void Register::setY(int y)
 {
-    this->sequenceNumber = sequenceNumber;
+    this->y = y;
 }
 
-int Data_packet::getType() const
+int Register::getSenderId() const
 {
-    return this->type;
+    return this->senderId;
 }
 
-void Data_packet::setType(int type)
+void Register::setSenderId(int senderId)
 {
-    this->type = type;
+    this->senderId = senderId;
 }
 
-int Data_packet::getSenderID() const
-{
-    return this->senderID;
-}
-
-void Data_packet::setSenderID(int senderID)
-{
-    this->senderID = senderID;
-}
-
-int Data_packet::getSize() const
-{
-    return this->size;
-}
-
-void Data_packet::setSize(int size)
-{
-    this->size = size;
-}
-
-payload& Data_packet::getData()
-{
-    return this->data;
-}
-
-void Data_packet::setData(const payload& data)
-{
-    this->data = data;
-}
-
-class Data_packetDescriptor : public omnetpp::cClassDescriptor
+class RegisterDescriptor : public omnetpp::cClassDescriptor
 {
   private:
     mutable const char **propertynames;
   public:
-    Data_packetDescriptor();
-    virtual ~Data_packetDescriptor();
+    RegisterDescriptor();
+    virtual ~RegisterDescriptor();
 
     virtual bool doesSupport(omnetpp::cObject *obj) const override;
     virtual const char **getPropertyNames() const override;
@@ -325,24 +284,24 @@ class Data_packetDescriptor : public omnetpp::cClassDescriptor
     virtual void *getFieldStructValuePointer(void *object, int field, int i) const override;
 };
 
-Register_ClassDescriptor(Data_packetDescriptor)
+Register_ClassDescriptor(RegisterDescriptor)
 
-Data_packetDescriptor::Data_packetDescriptor() : omnetpp::cClassDescriptor("Data_packet", "omnetpp::cPacket")
+RegisterDescriptor::RegisterDescriptor() : omnetpp::cClassDescriptor("Register", "omnetpp::cMessage")
 {
     propertynames = nullptr;
 }
 
-Data_packetDescriptor::~Data_packetDescriptor()
+RegisterDescriptor::~RegisterDescriptor()
 {
     delete[] propertynames;
 }
 
-bool Data_packetDescriptor::doesSupport(omnetpp::cObject *obj) const
+bool RegisterDescriptor::doesSupport(omnetpp::cObject *obj) const
 {
-    return dynamic_cast<Data_packet *>(obj)!=nullptr;
+    return dynamic_cast<Register *>(obj)!=nullptr;
 }
 
-const char **Data_packetDescriptor::getPropertyNames() const
+const char **RegisterDescriptor::getPropertyNames() const
 {
     if (!propertynames) {
         static const char *names[] = {  nullptr };
@@ -353,19 +312,19 @@ const char **Data_packetDescriptor::getPropertyNames() const
     return propertynames;
 }
 
-const char *Data_packetDescriptor::getProperty(const char *propertyname) const
+const char *RegisterDescriptor::getProperty(const char *propertyname) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     return basedesc ? basedesc->getProperty(propertyname) : nullptr;
 }
 
-int Data_packetDescriptor::getFieldCount() const
+int RegisterDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 6+basedesc->getFieldCount() : 6;
+    return basedesc ? 3+basedesc->getFieldCount() : 3;
 }
 
-unsigned int Data_packetDescriptor::getFieldTypeFlags(int field) const
+unsigned int RegisterDescriptor::getFieldTypeFlags(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -377,14 +336,11 @@ unsigned int Data_packetDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
-        FD_ISEDITABLE,
-        FD_ISEDITABLE,
-        FD_ISCOMPOUND,
     };
-    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
-const char *Data_packetDescriptor::getFieldName(int field) const
+const char *RegisterDescriptor::getFieldName(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -393,30 +349,24 @@ const char *Data_packetDescriptor::getFieldName(int field) const
         field -= basedesc->getFieldCount();
     }
     static const char *fieldNames[] = {
-        "isRequest",
-        "sequenceNumber",
-        "type",
-        "senderID",
-        "size",
-        "data",
+        "x",
+        "y",
+        "senderId",
     };
-    return (field>=0 && field<6) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<3) ? fieldNames[field] : nullptr;
 }
 
-int Data_packetDescriptor::findField(const char *fieldName) const
+int RegisterDescriptor::findField(const char *fieldName) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     int base = basedesc ? basedesc->getFieldCount() : 0;
-    if (fieldName[0]=='i' && strcmp(fieldName, "isRequest")==0) return base+0;
-    if (fieldName[0]=='s' && strcmp(fieldName, "sequenceNumber")==0) return base+1;
-    if (fieldName[0]=='t' && strcmp(fieldName, "type")==0) return base+2;
-    if (fieldName[0]=='s' && strcmp(fieldName, "senderID")==0) return base+3;
-    if (fieldName[0]=='s' && strcmp(fieldName, "size")==0) return base+4;
-    if (fieldName[0]=='d' && strcmp(fieldName, "data")==0) return base+5;
+    if (fieldName[0]=='x' && strcmp(fieldName, "x")==0) return base+0;
+    if (fieldName[0]=='y' && strcmp(fieldName, "y")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "senderId")==0) return base+2;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
-const char *Data_packetDescriptor::getFieldTypeString(int field) const
+const char *RegisterDescriptor::getFieldTypeString(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -425,17 +375,14 @@ const char *Data_packetDescriptor::getFieldTypeString(int field) const
         field -= basedesc->getFieldCount();
     }
     static const char *fieldTypeStrings[] = {
-        "bool",
         "int",
         "int",
         "int",
-        "int",
-        "payload",
     };
-    return (field>=0 && field<6) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : nullptr;
 }
 
-const char **Data_packetDescriptor::getFieldPropertyNames(int field) const
+const char **RegisterDescriptor::getFieldPropertyNames(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -448,7 +395,7 @@ const char **Data_packetDescriptor::getFieldPropertyNames(int field) const
     }
 }
 
-const char *Data_packetDescriptor::getFieldProperty(int field, const char *propertyname) const
+const char *RegisterDescriptor::getFieldProperty(int field, const char *propertyname) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -461,7 +408,7 @@ const char *Data_packetDescriptor::getFieldProperty(int field, const char *prope
     }
 }
 
-int Data_packetDescriptor::getFieldArraySize(void *object, int field) const
+int RegisterDescriptor::getFieldArraySize(void *object, int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -469,13 +416,13 @@ int Data_packetDescriptor::getFieldArraySize(void *object, int field) const
             return basedesc->getFieldArraySize(object, field);
         field -= basedesc->getFieldCount();
     }
-    Data_packet *pp = (Data_packet *)object; (void)pp;
+    Register *pp = (Register *)object; (void)pp;
     switch (field) {
         default: return 0;
     }
 }
 
-const char *Data_packetDescriptor::getFieldDynamicTypeString(void *object, int field, int i) const
+const char *RegisterDescriptor::getFieldDynamicTypeString(void *object, int field, int i) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -483,13 +430,13 @@ const char *Data_packetDescriptor::getFieldDynamicTypeString(void *object, int f
             return basedesc->getFieldDynamicTypeString(object,field,i);
         field -= basedesc->getFieldCount();
     }
-    Data_packet *pp = (Data_packet *)object; (void)pp;
+    Register *pp = (Register *)object; (void)pp;
     switch (field) {
         default: return nullptr;
     }
 }
 
-std::string Data_packetDescriptor::getFieldValueAsString(void *object, int field, int i) const
+std::string RegisterDescriptor::getFieldValueAsString(void *object, int field, int i) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -497,19 +444,16 @@ std::string Data_packetDescriptor::getFieldValueAsString(void *object, int field
             return basedesc->getFieldValueAsString(object,field,i);
         field -= basedesc->getFieldCount();
     }
-    Data_packet *pp = (Data_packet *)object; (void)pp;
+    Register *pp = (Register *)object; (void)pp;
     switch (field) {
-        case 0: return bool2string(pp->getIsRequest());
-        case 1: return long2string(pp->getSequenceNumber());
-        case 2: return long2string(pp->getType());
-        case 3: return long2string(pp->getSenderID());
-        case 4: return long2string(pp->getSize());
-        case 5: {std::stringstream out; out << pp->getData(); return out.str();}
+        case 0: return long2string(pp->getX());
+        case 1: return long2string(pp->getY());
+        case 2: return long2string(pp->getSenderId());
         default: return "";
     }
 }
 
-bool Data_packetDescriptor::setFieldValueAsString(void *object, int field, int i, const char *value) const
+bool RegisterDescriptor::setFieldValueAsString(void *object, int field, int i, const char *value) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -517,18 +461,16 @@ bool Data_packetDescriptor::setFieldValueAsString(void *object, int field, int i
             return basedesc->setFieldValueAsString(object,field,i,value);
         field -= basedesc->getFieldCount();
     }
-    Data_packet *pp = (Data_packet *)object; (void)pp;
+    Register *pp = (Register *)object; (void)pp;
     switch (field) {
-        case 0: pp->setIsRequest(string2bool(value)); return true;
-        case 1: pp->setSequenceNumber(string2long(value)); return true;
-        case 2: pp->setType(string2long(value)); return true;
-        case 3: pp->setSenderID(string2long(value)); return true;
-        case 4: pp->setSize(string2long(value)); return true;
+        case 0: pp->setX(string2long(value)); return true;
+        case 1: pp->setY(string2long(value)); return true;
+        case 2: pp->setSenderId(string2long(value)); return true;
         default: return false;
     }
 }
 
-const char *Data_packetDescriptor::getFieldStructName(int field) const
+const char *RegisterDescriptor::getFieldStructName(int field) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -537,12 +479,11 @@ const char *Data_packetDescriptor::getFieldStructName(int field) const
         field -= basedesc->getFieldCount();
     }
     switch (field) {
-        case 5: return omnetpp::opp_typename(typeid(payload));
         default: return nullptr;
     };
 }
 
-void *Data_packetDescriptor::getFieldStructValuePointer(void *object, int field, int i) const
+void *RegisterDescriptor::getFieldStructValuePointer(void *object, int field, int i) const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
     if (basedesc) {
@@ -550,9 +491,8 @@ void *Data_packetDescriptor::getFieldStructValuePointer(void *object, int field,
             return basedesc->getFieldStructValuePointer(object, field, i);
         field -= basedesc->getFieldCount();
     }
-    Data_packet *pp = (Data_packet *)object; (void)pp;
+    Register *pp = (Register *)object; (void)pp;
     switch (field) {
-        case 5: return (void *)(&pp->getData()); break;
         default: return nullptr;
     }
 }
