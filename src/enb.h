@@ -4,16 +4,14 @@
 
 #include <omnetpp.h>
 
-#define NONE 0
-#define DOWNLOAD 1
-#define READY 2
+#include "FileTransfer.h"
 
 using namespace omnetpp;
 
 /**
  * TODO - Generated class
  */
-class Enb : public cSimpleModule
+class Enb : public cSimpleModule, public FileTransfer
 {
   protected:
     virtual void initialize();
@@ -21,12 +19,6 @@ class Enb : public cSimpleModule
     virtual void finish();
 
   private:
-    char *files[3];
-    int fsize[3];
-    int f[3][20] = { {0}, {0}, {0} };
-    int progress[3][20] = { {0}, {0}, {0} };
-    Data_packet* createFileResponse(int userId, int fileId, int seqNumber);
-    void updateProgress(int userId, int fileId, int bytes_sent);
     int user_pos[20][2] = { {0} }; //20 users; 2 - x, y
     int enb_x, enb_y;
     int nearestN(int userId, int fileId);

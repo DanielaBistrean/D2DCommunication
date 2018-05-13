@@ -28,6 +28,7 @@
  * {
  *     int userId;
  *     int fileId;
+ *     int seq;
  * }
  * </pre>
  */
@@ -36,6 +37,7 @@ class D2dReq : public ::omnetpp::cMessage
   protected:
     int userId;
     int fileId;
+    int seq;
 
   private:
     void copy(const D2dReq& other);
@@ -58,6 +60,8 @@ class D2dReq : public ::omnetpp::cMessage
     virtual void setUserId(int userId);
     virtual int getFileId() const;
     virtual void setFileId(int fileId);
+    virtual int getSeq() const;
+    virtual void setSeq(int seq);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const D2dReq& obj) {obj.parsimPack(b);}

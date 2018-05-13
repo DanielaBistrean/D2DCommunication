@@ -38,6 +38,7 @@
  *     int senderID;
  *     int size;
  *     payload data;
+ *     bool isD2D;
  * }
  * </pre>
  */
@@ -50,6 +51,7 @@ class Data_packet : public ::omnetpp::cPacket
     int senderID;
     int size;
     payload data;
+    bool isD2D;
 
   private:
     void copy(const Data_packet& other);
@@ -81,6 +83,8 @@ class Data_packet : public ::omnetpp::cPacket
     virtual payload& getData();
     virtual const payload& getData() const {return const_cast<Data_packet*>(this)->getData();}
     virtual void setData(const payload& data);
+    virtual bool getIsD2D() const;
+    virtual void setIsD2D(bool isD2D);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const Data_packet& obj) {obj.parsimPack(b);}

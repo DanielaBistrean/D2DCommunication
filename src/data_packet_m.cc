@@ -186,6 +186,7 @@ Data_packet::Data_packet(const char *name, short kind) : ::omnetpp::cPacket(name
     this->type = 0;
     this->senderID = 0;
     this->size = 0;
+    this->isD2D = false;
 }
 
 Data_packet::Data_packet(const Data_packet& other) : ::omnetpp::cPacket(other)
@@ -213,6 +214,7 @@ void Data_packet::copy(const Data_packet& other)
     this->senderID = other.senderID;
     this->size = other.size;
     this->data = other.data;
+    this->isD2D = other.isD2D;
 }
 
 void Data_packet::parsimPack(omnetpp::cCommBuffer *b) const
@@ -224,6 +226,7 @@ void Data_packet::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->senderID);
     doParsimPacking(b,this->size);
     doParsimPacking(b,this->data);
+    doParsimPacking(b,this->isD2D);
 }
 
 void Data_packet::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -235,6 +238,7 @@ void Data_packet::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->senderID);
     doParsimUnpacking(b,this->size);
     doParsimUnpacking(b,this->data);
+    doParsimUnpacking(b,this->isD2D);
 }
 
 bool Data_packet::getIsRequest() const
@@ -295,6 +299,16 @@ payload& Data_packet::getData()
 void Data_packet::setData(const payload& data)
 {
     this->data = data;
+}
+
+bool Data_packet::getIsD2D() const
+{
+    return this->isD2D;
+}
+
+void Data_packet::setIsD2D(bool isD2D)
+{
+    this->isD2D = isD2D;
 }
 
 class Data_packetDescriptor : public omnetpp::cClassDescriptor
@@ -362,7 +376,7 @@ const char *Data_packetDescriptor::getProperty(const char *propertyname) const
 int Data_packetDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 6+basedesc->getFieldCount() : 6;
+    return basedesc ? 7+basedesc->getFieldCount() : 7;
 }
 
 unsigned int Data_packetDescriptor::getFieldTypeFlags(int field) const
@@ -380,8 +394,9 @@ unsigned int Data_packetDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISCOMPOUND,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<6) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<7) ? fieldTypeFlags[field] : 0;
 }
 
 const char *Data_packetDescriptor::getFieldName(int field) const
@@ -399,8 +414,9 @@ const char *Data_packetDescriptor::getFieldName(int field) const
         "senderID",
         "size",
         "data",
+        "isD2D",
     };
-    return (field>=0 && field<6) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<7) ? fieldNames[field] : nullptr;
 }
 
 int Data_packetDescriptor::findField(const char *fieldName) const
@@ -413,6 +429,7 @@ int Data_packetDescriptor::findField(const char *fieldName) const
     if (fieldName[0]=='s' && strcmp(fieldName, "senderID")==0) return base+3;
     if (fieldName[0]=='s' && strcmp(fieldName, "size")==0) return base+4;
     if (fieldName[0]=='d' && strcmp(fieldName, "data")==0) return base+5;
+    if (fieldName[0]=='i' && strcmp(fieldName, "isD2D")==0) return base+6;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -431,8 +448,9 @@ const char *Data_packetDescriptor::getFieldTypeString(int field) const
         "int",
         "int",
         "payload",
+        "bool",
     };
-    return (field>=0 && field<6) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<7) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **Data_packetDescriptor::getFieldPropertyNames(int field) const
@@ -505,6 +523,7 @@ std::string Data_packetDescriptor::getFieldValueAsString(void *object, int field
         case 3: return long2string(pp->getSenderID());
         case 4: return long2string(pp->getSize());
         case 5: {std::stringstream out; out << pp->getData(); return out.str();}
+        case 6: return bool2string(pp->getIsD2D());
         default: return "";
     }
 }
@@ -524,6 +543,7 @@ bool Data_packetDescriptor::setFieldValueAsString(void *object, int field, int i
         case 2: pp->setType(string2long(value)); return true;
         case 3: pp->setSenderID(string2long(value)); return true;
         case 4: pp->setSize(string2long(value)); return true;
+        case 6: pp->setIsD2D(string2bool(value)); return true;
         default: return false;
     }
 }

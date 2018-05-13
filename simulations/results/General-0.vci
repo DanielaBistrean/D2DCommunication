@@ -1,0 +1,32 @@
+                                                                
+version 2
+run General-0-20180513-22:53:25-20561
+attr configname General
+attr datetime 20180513-22:53:25
+attr experiment General
+attr inifile omnetpp.ini
+attr iterationvars ""
+attr iterationvarsf ""
+attr measurement ""
+attr network d2dcommunication.final_net
+attr processid 20561
+attr repetition 0
+attr replication #0
+attr resultdir results
+attr runnumber 0
+attr seedset 0
+
+vector 0 final_net.n[5] D2ICommunication:vector ETV
+vector 1 final_net.n[8] D2ICommunication:vector ETV
+vector 2 final_net.n[6] D2ICommunication:vector ETV
+vector 3 final_net.n[1] D2ICommunication:vector ETV
+vector 4 final_net.n[9] D2ICommunication:vector ETV
+vector 5 final_net.n[7] D2ICommunication:vector ETV
+vector 6 final_net.n[2] D2DCommunication:vector ETV
+0	737 40650 13 10233 0.395215464158 1.110546308612 1536 4096 4096 6291456 25769803776
+1	41387 20548 1552 3086 0.555680711484 0.656363816656 768 4096 4096 3145728 12884901888
+2	61935 22883 3091 21477 0.670531662767 1.593533473429 848 4096 4096 3473408 14227079168
+3	84818 99335 4630 21484 0.788926198643 1.593614429813 3618 4096 4096 14819328 60699967488
+4	184153 85675 10106 18460 1.108037458169 1.407458720556 3072 4096 4096 12582912 51539607552
+5	269828 15176 18846 21480 1.536564571273 1.593566353531 542 4096 4096 2220032 9093251072
+6	285004 9417 19786 21479 1.566336736844 1.5935602918 339 4096 4096 1388544 5687476224

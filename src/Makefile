@@ -30,7 +30,13 @@ PROJECTRELATIVE_PATH = src
 O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
-OBJS = $O/enb.o $O/node.o $O/d2dReq_m.o $O/data_packet_m.o $O/Register_m.o
+OBJS = \
+    $O/enb.o \
+    $O/FileTransfer.o \
+    $O/node.o \
+    $O/d2dReq_m.o \
+    $O/data_packet_m.o \
+    $O/Register_m.o
 
 # Message files
 MSGFILES = \

@@ -3,13 +3,14 @@
 #define __D2DCOMMUNICATION_NODE_H_
 
 #include <omnetpp.h>
+#include "FileTransfer.h"
 
 using namespace omnetpp;
 
 /**
  * TODO - Generated class
  */
-class Node : public cSimpleModule
+class Node : public cSimpleModule, public FileTransfer
 {
   protected:
     virtual void initialize();
@@ -20,6 +21,8 @@ class Node : public cSimpleModule
     static int count;
     int id;
     int x, y;
+    simsignal_t D2DCommunication;
+    simsignal_t D2ICommunication;
 };
 
 #endif

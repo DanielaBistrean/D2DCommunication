@@ -183,6 +183,7 @@ D2dReq::D2dReq(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
 {
     this->userId = 0;
     this->fileId = 0;
+    this->seq = 0;
 }
 
 D2dReq::D2dReq(const D2dReq& other) : ::omnetpp::cMessage(other)
@@ -206,6 +207,7 @@ void D2dReq::copy(const D2dReq& other)
 {
     this->userId = other.userId;
     this->fileId = other.fileId;
+    this->seq = other.seq;
 }
 
 void D2dReq::parsimPack(omnetpp::cCommBuffer *b) const
@@ -213,6 +215,7 @@ void D2dReq::parsimPack(omnetpp::cCommBuffer *b) const
     ::omnetpp::cMessage::parsimPack(b);
     doParsimPacking(b,this->userId);
     doParsimPacking(b,this->fileId);
+    doParsimPacking(b,this->seq);
 }
 
 void D2dReq::parsimUnpack(omnetpp::cCommBuffer *b)
@@ -220,6 +223,7 @@ void D2dReq::parsimUnpack(omnetpp::cCommBuffer *b)
     ::omnetpp::cMessage::parsimUnpack(b);
     doParsimUnpacking(b,this->userId);
     doParsimUnpacking(b,this->fileId);
+    doParsimUnpacking(b,this->seq);
 }
 
 int D2dReq::getUserId() const
@@ -240,6 +244,16 @@ int D2dReq::getFileId() const
 void D2dReq::setFileId(int fileId)
 {
     this->fileId = fileId;
+}
+
+int D2dReq::getSeq() const
+{
+    return this->seq;
+}
+
+void D2dReq::setSeq(int seq)
+{
+    this->seq = seq;
 }
 
 class D2dReqDescriptor : public omnetpp::cClassDescriptor
@@ -307,7 +321,7 @@ const char *D2dReqDescriptor::getProperty(const char *propertyname) const
 int D2dReqDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 2+basedesc->getFieldCount() : 2;
+    return basedesc ? 3+basedesc->getFieldCount() : 3;
 }
 
 unsigned int D2dReqDescriptor::getFieldTypeFlags(int field) const
@@ -321,8 +335,9 @@ unsigned int D2dReqDescriptor::getFieldTypeFlags(int field) const
     static unsigned int fieldTypeFlags[] = {
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<2) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<3) ? fieldTypeFlags[field] : 0;
 }
 
 const char *D2dReqDescriptor::getFieldName(int field) const
@@ -336,8 +351,9 @@ const char *D2dReqDescriptor::getFieldName(int field) const
     static const char *fieldNames[] = {
         "userId",
         "fileId",
+        "seq",
     };
-    return (field>=0 && field<2) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<3) ? fieldNames[field] : nullptr;
 }
 
 int D2dReqDescriptor::findField(const char *fieldName) const
@@ -346,6 +362,7 @@ int D2dReqDescriptor::findField(const char *fieldName) const
     int base = basedesc ? basedesc->getFieldCount() : 0;
     if (fieldName[0]=='u' && strcmp(fieldName, "userId")==0) return base+0;
     if (fieldName[0]=='f' && strcmp(fieldName, "fileId")==0) return base+1;
+    if (fieldName[0]=='s' && strcmp(fieldName, "seq")==0) return base+2;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -360,8 +377,9 @@ const char *D2dReqDescriptor::getFieldTypeString(int field) const
     static const char *fieldTypeStrings[] = {
         "int",
         "int",
+        "int",
     };
-    return (field>=0 && field<2) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<3) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **D2dReqDescriptor::getFieldPropertyNames(int field) const
@@ -430,6 +448,7 @@ std::string D2dReqDescriptor::getFieldValueAsString(void *object, int field, int
     switch (field) {
         case 0: return long2string(pp->getUserId());
         case 1: return long2string(pp->getFileId());
+        case 2: return long2string(pp->getSeq());
         default: return "";
     }
 }
@@ -446,6 +465,7 @@ bool D2dReqDescriptor::setFieldValueAsString(void *object, int field, int i, con
     switch (field) {
         case 0: pp->setUserId(string2long(value)); return true;
         case 1: pp->setFileId(string2long(value)); return true;
+        case 2: pp->setSeq(string2long(value)); return true;
         default: return false;
     }
 }

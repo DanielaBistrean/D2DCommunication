@@ -13,11 +13,29 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-//
-// TODO generated message class
-//
-message D2dReq {
-    int userId;
-    int fileId;
-    int seq;
-}
+#ifndef FILETRANSFER_H_
+#define FILETRANSFER_H_
+
+#include "data_packet_m.h"
+
+#define NONE 0
+#define DOWNLOAD 1
+#define READY 2
+
+class FileTransfer {
+public:
+    FileTransfer();
+    virtual ~FileTransfer();
+protected:
+    virtual Data_packet* createFileResponse(int userId, int fileId, int seqNumber);
+    virtual void updateProgress(int userId, int fileId, int bytes_sent);
+    virtual int getFileStatus(int userId, int fileId);
+private:
+    char *files[3];
+    int fsize[3];
+    int f[3][20] = { {0}, {0}, {0} };
+    int progress[3][20] = { {0}, {0}, {0} };
+
+};
+
+#endif /* FILETRANSFER_H_ */

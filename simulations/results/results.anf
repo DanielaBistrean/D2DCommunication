@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scave:Analysis xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:scave="http://www.omnetpp.org/omnetpp/scave">
+  <inputs>
+    <inputs name="/D2DCommunication/simulations/results/General-0.vec"/>
+  </inputs>
+  <datasets>
+    <datasets name="D2D">
+      <items xsi:type="scave:Group">
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[5]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[4]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[7]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[8]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[0]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[3]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[2]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[1]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Apply" operation="aggregator">
+          <params name="function" value="sum"/>
+        </items>
+        <items xsi:type="scave:Apply" operation="sum"/>
+        <items xsi:type="scave:LineChart"/>
+      </items>
+    </datasets>
+    <datasets name="D2I">
+      <items xsi:type="scave:Group">
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[0]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[2]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[7]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[9]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[1]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[6]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[8]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[5]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Apply" operation="aggregator">
+          <params name="function" value="sum"/>
+        </items>
+        <items xsi:type="scave:Apply" operation="sum"/>
+        <items xsi:type="scave:LineChart"/>
+      </items>
+    </datasets>
+    <datasets name="All">
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[5]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[4]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[7]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[8]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[0]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[3]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[2]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[1]) AND name(D2DCommunication:vector)" type="VECTOR"/>
+      <items xsi:type="scave:Apply" operation="aggregator">
+        <groupBy>name</groupBy>
+      </items>
+      <items xsi:type="scave:Group" name="d2d">
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[0]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[2]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[7]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[9]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[1]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[6]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[8]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:Add" filterPattern="file(/D2DCommunication/simulations/results/General-0.vec) AND attr:configname(General) AND attr:runnumber(0) AND module(final_net.n[5]) AND name(D2ICommunication:vector)" type="VECTOR"/>
+        <items xsi:type="scave:LineChart"/>
+      </items>
+    </datasets>
+  </datasets>
+  <chartSheets>
+    <chartSheets name="default" charts="//@datasets/@datasets.0/@items.0/@items.10 //@datasets/@datasets.1/@items.0/@items.10 //@datasets/@datasets.2/@items.9/@items.8"/>
+  </chartSheets>
+</scave:Analysis>

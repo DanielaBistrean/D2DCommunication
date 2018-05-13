@@ -4,6 +4,7 @@
 #include "data_packet_m.h"
 #include "data_packet_types.h"
 #include "Register_m.h"
+#include "d2dReq_m.h"
 
 #define NONE 0
 #define DOWNLOAD 1
@@ -17,10 +18,13 @@ int Node::count = 0;
 
 void Node::initialize()
 {
+    float r2 = static_cast <float> (rand()) * 2 / (static_cast <float> (RAND_MAX));
     cMessage *msg = new cMessage("message");
-    scheduleAt(simTime(), msg); // mesaj propriu -> peste un timp
+    scheduleAt(simTime() + r2, msg); // mesaj propriu -> peste un timp
     status[0] = status[1] = status[2] = NONE;
 
+    D2DCommunication = registerSignal("D2DCommunication");
+    D2ICommunication = registerSignal("D2ICommunication");
 
     this->id = Node::count;
     Node::count ++;
@@ -31,8 +35,6 @@ void Node::initialize()
 
     this->getDisplayString().setTagArg("p", 0, x);
     this->getDisplayString().setTagArg("p", 1, y);
-
-
 
     Register *reg = new Register("Register");
     reg->setX(this->x);
@@ -46,7 +48,8 @@ void Node::handleMessage(cMessage *msg)
 {
     if (msg->isSelfMessage())
     {
-        if (status[1] == NONE)
+        int fileId = static_cast <int> (rand()) % 3;
+        if (status[fileId] == NONE)
         {
             Data_packet *data_packet = new Data_packet("Req");
             data_packet->setIsRequest(true);
@@ -54,15 +57,30 @@ void Node::handleMessage(cMessage *msg)
             data_packet->setSequenceNumber(0);
             data_packet->setSenderID(this->id);
             payload p;
-            p.fileId = 0;
+            p.fileId = fileId;
             data_packet->setData(p);
             send(data_packet, "out", 0);
 
-            float r2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
-            scheduleAt((simTime()+r2), msg);
-
-            status[1] = DOWNLOAD;
+            status[fileId] = DOWNLOAD;
         }
+
+        float r2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
+        scheduleAt((simTime()+r2), msg);
+    }
+    else if (msg->arrivedOn("register$i"))
+    {
+        D2dReq *req = static_cast <D2dReq*> (msg);
+
+        int userId = req->getUserId();
+        int fileId = req->getFileId();
+        int seq = req->getSeq();
+
+        Data_packet *res = createFileResponse(userId, fileId, seq + 1);
+        res->setIsD2D(true);
+
+        send(res, "out", userId + 1);
+
+        delete(msg);
     }
     else
     {
@@ -78,12 +96,34 @@ void Node::handleMessage(cMessage *msg)
             payload p;
             p.fileId = dp->getData().fileId;
             response->setData(p);
+
+            bool isD2D = dp->getIsD2D();
+            if (isD2D)
+            {
+                emit(D2DCommunication, dp->getSize());
+            }
+            else
+            {
+                emit(D2ICommunication, dp->getSize());
+            }
+
             //send(response, "out");
             send(response, "out", dp->getArrivalGate()->getIndex());
         }
         else if (dp->getType() == FILE_END)
         {
             status[dp->getData().fileId] = READY;
+        }
+        else if (dp->getType() == FILE_ACK)
+        {
+            int fileId = dp->getData().fileId;
+            int userId = dp->getSenderID();
+            int seqNum = dp->getSequenceNumber();
+            int size = dp->getSize();
+            updateProgress(userId, fileId, size);
+            Data_packet *res = createFileResponse(userId, fileId, seqNum);
+            res->setIsD2D(true);
+            send(res, "out", dp->getArrivalGate()->getIndex());
         }
 
             delete dp;

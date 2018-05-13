@@ -32,4 +32,5 @@ packet Data_packet {
     int senderID;
     int size;
     payload data;
+    bool isD2D;
 }
