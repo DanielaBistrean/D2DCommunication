@@ -6,6 +6,8 @@ package d2dcommunication;
 //
 simple Enb
 {
+    parameters:
+        @display("i=device/antennatower");
     gates:
         input in[20] @loose;
         output out[20] @loose;

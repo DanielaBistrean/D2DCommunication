@@ -8,6 +8,7 @@ package d2dcommunication;
 simple Node
 {
     parameters:
+        @display("i=device/cellphone");
         int size = default(10);
         @signal[D2DCommunication](type=unsigned long);
         @signal[D2ICommunication](type=unsigned long);
