@@ -29,6 +29,8 @@ void Node::initialize()
     this->id = Node::count;
     Node::count ++;
 
+    config = check_and_cast <Configurator*> (Configurator::getConfigurator(this));
+
     cRNG *random = this->getRNG(0);
     x = random->intRand(100); // x in the range of 0 to 100
     y = random->intRand(100); // y in the range of 0 to 100    getDisplayString()->setTagArg("p", 0, pos.x);
@@ -41,7 +43,8 @@ void Node::initialize()
     reg->setY(this->y);
     reg->setSenderId(this->id);
 
-    send(reg, "register$o");
+    //send(reg, "register$o");
+    sendDirect(reg, config->geteNBControlGate(id));
 }
 
 void Node::handleMessage(cMessage *msg)

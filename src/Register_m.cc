@@ -179,14 +179,14 @@ inline std::ostream& operator<<(std::ostream& out, const std::vector<T,A>& vec)
 
 Register_Class(Register)
 
-Register::Register(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
+Register::Register(const char *name, short kind) : ::omnetpp::cPacket(name,kind)
 {
     this->x = 0;
     this->y = 0;
     this->senderId = 0;
 }
 
-Register::Register(const Register& other) : ::omnetpp::cMessage(other)
+Register::Register(const Register& other) : ::omnetpp::cPacket(other)
 {
     copy(other);
 }
@@ -198,7 +198,7 @@ Register::~Register()
 Register& Register::operator=(const Register& other)
 {
     if (this==&other) return *this;
-    ::omnetpp::cMessage::operator=(other);
+    ::omnetpp::cPacket::operator=(other);
     copy(other);
     return *this;
 }
@@ -212,7 +212,7 @@ void Register::copy(const Register& other)
 
 void Register::parsimPack(omnetpp::cCommBuffer *b) const
 {
-    ::omnetpp::cMessage::parsimPack(b);
+    ::omnetpp::cPacket::parsimPack(b);
     doParsimPacking(b,this->x);
     doParsimPacking(b,this->y);
     doParsimPacking(b,this->senderId);
@@ -220,7 +220,7 @@ void Register::parsimPack(omnetpp::cCommBuffer *b) const
 
 void Register::parsimUnpack(omnetpp::cCommBuffer *b)
 {
-    ::omnetpp::cMessage::parsimUnpack(b);
+    ::omnetpp::cPacket::parsimUnpack(b);
     doParsimUnpacking(b,this->x);
     doParsimUnpacking(b,this->y);
     doParsimUnpacking(b,this->senderId);
@@ -286,7 +286,7 @@ class RegisterDescriptor : public omnetpp::cClassDescriptor
 
 Register_ClassDescriptor(RegisterDescriptor)
 
-RegisterDescriptor::RegisterDescriptor() : omnetpp::cClassDescriptor("Register", "omnetpp::cMessage")
+RegisterDescriptor::RegisterDescriptor() : omnetpp::cClassDescriptor("Register", "omnetpp::cPacket")
 {
     propertynames = nullptr;
 }

@@ -13,12 +13,13 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-//
-// TODO generated message class
-//
-packet Register {
-    int x;
-    int y;
-    int senderId;
+package d2dcommunication;
 
+//
+// TODO auto-generated module
+//
+simple Configurator
+{
+    parameters:
+    	int size = default(10);
 }

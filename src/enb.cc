@@ -16,6 +16,8 @@ void Enb::initialize()
 
     this->getDisplayString().setTagArg("p", 0, enb_x);
     this->getDisplayString().setTagArg("p", 1, enb_y);
+
+    config = check_and_cast <Configurator*> (Configurator::getConfigurator(this));
 }
 
 
@@ -93,7 +95,8 @@ void Enb::handleMessage(cMessage *msg)
                 d2d->setFileId(fileId);
                 d2d->setSeq(seqNum);
 
-                send(d2d, "register$o", nearest);
+                //send(d2d, "register$o", nearest);
+                sendDirect(d2d, config->getNodeControlGate(userId));
             }
 
         }

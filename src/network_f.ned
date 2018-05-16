@@ -22,7 +22,9 @@ network final_net
     parameters:
         int size = default(10);
         n[*].size = size;
-    submodules:       
+        config.size = size;
+    submodules:     
+        config : Configurator;  
         n[size] : Node
         {
             //@display("p=100,100,ri,100,100");
@@ -33,12 +35,12 @@ network final_net
         };
         //ac : Node;
         
-    connections:
+     connections:
         for i = 0..(size - 1)
         {
             n[i].in[0]  <-- { delay = uniform(10us, 100us); } <-- enb.out[i];
         	n[i].out[0] --> { delay = uniform(10us, 100us); } --> enb.in[i];
-        	n[i].register <--> enb.register[i];
+        	//n[i].register <--> enb.register[i];
         }
         
         for i = 0..(size - 1), for j = 0..(size - 1), if i != j

@@ -17,5 +17,5 @@ simple Node
     gates:
         input in[size];
         output out[size];
-        inout register;
+        inout register @directIn;
 }

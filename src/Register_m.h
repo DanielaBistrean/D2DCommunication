@@ -24,7 +24,7 @@
  * //
  * // TODO generated message class
  * //
- * message Register
+ * packet Register
  * {
  *     int x;
  *     int y;
@@ -33,7 +33,7 @@
  * }
  * </pre>
  */
-class Register : public ::omnetpp::cMessage
+class Register : public ::omnetpp::cPacket
 {
   protected:
     int x;

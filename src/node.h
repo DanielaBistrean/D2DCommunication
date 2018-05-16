@@ -4,6 +4,7 @@
 
 #include <omnetpp.h>
 #include "FileTransfer.h"
+#include "configurator.h"
 
 using namespace omnetpp;
 
@@ -23,6 +24,7 @@ class Node : public cSimpleModule, public FileTransfer
     int x, y;
     simsignal_t D2DCommunication;
     simsignal_t D2ICommunication;
+    Configurator* config;
 };
 
 #endif

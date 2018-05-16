@@ -13,12 +13,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-//
-// TODO generated message class
-//
-packet Register {
-    int x;
-    int y;
-    int senderId;
+#ifndef __D2DCOMMUNICATION_CONFIGURATOR_H_
+#define __D2DCOMMUNICATION_CONFIGURATOR_H_
 
-}
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+/**
+ * TODO - Generated class
+ */
+class Configurator : public cSimpleModule
+{
+  protected:
+    virtual void initialize();
+    virtual void finish();
+
+  private:
+    cModule* enb;
+    cModule** nodes;
+
+  public:
+    static cModule* getConfigurator(cModule *thisModule);
+    cGate* geteNBControlGate(int userId); // userId because control gate is a vector at eNB
+    cGate* getNodeControlGate(int userId);// userId because there is a vector of users
+};
+
+#endif
