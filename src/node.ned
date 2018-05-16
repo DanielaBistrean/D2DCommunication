@@ -15,7 +15,6 @@ simple Node
         @statistic[D2DCommunication](record = vector);
         @statistic[D2ICommunication](record = vector);
     gates:
-        input in[size];
-        output out[size];
+        input in[size+1] @directIn;
         inout register @directIn;
 }

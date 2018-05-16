@@ -46,6 +46,16 @@ cGate* Configurator::getNodeControlGate(int userId)
     return nodes[userId]->gate("register$i");
 }
 
+cGate* Configurator::getNodeGate(int userId, int sid)
+{
+    return nodes[userId]->gate("in", sid + 1);
+}
+
+cGate* Configurator::getENBGate(int userId)
+{
+    return enb->gate("in", userId);
+}
+
 void Configurator::finish()
 {
     delete [] nodes;

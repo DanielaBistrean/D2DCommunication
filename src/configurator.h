@@ -37,6 +37,8 @@ class Configurator : public cSimpleModule
     static cModule* getConfigurator(cModule *thisModule);
     cGate* geteNBControlGate(int userId); // userId because control gate is a vector at eNB
     cGate* getNodeControlGate(int userId);// userId because there is a vector of users
+    cGate* getNodeGate(int userId, int sid);
+    cGate* getENBGate(int userId);
 };
 
 #endif

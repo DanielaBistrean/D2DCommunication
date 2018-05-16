@@ -9,7 +9,7 @@ simple Enb
     parameters:
         @display("i=device/antennatower");
     gates:
-        input in[20] @loose;
-        output out[20] @loose;
+        input in[20] @loose @directIn;
+        output out[20] @loose @directIn;
         inout register[20] @loose @directIn;
 }

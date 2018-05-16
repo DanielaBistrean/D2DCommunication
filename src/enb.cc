@@ -45,8 +45,6 @@ int Enb::nearestN(int userId, int fileId)
 
           EV << "Distance from " << " userId " << " to " << i << " is " << distNcN << endl;
 
-          /*EV << "user_pos " << user_pos[userId][0] << endl;
-          EV << "user_pos " << user_pos[userId][1] << endl;*/
       }
     }
 
@@ -95,8 +93,7 @@ void Enb::handleMessage(cMessage *msg)
                 d2d->setFileId(fileId);
                 d2d->setSeq(seqNum);
 
-                //send(d2d, "register$o", nearest);
-                sendDirect(d2d, config->getNodeControlGate(userId));
+                sendDirect(d2d, config->getNodeControlGate(nearest));
             }
 
         }
@@ -108,9 +105,10 @@ void Enb::handleMessage(cMessage *msg)
 
         if (res != NULL)
         {
-            // send res
             res->setIsD2D(false);
-            send(res, this->gate("out", fr->getArrivalGate()->getIndex()));
+            res->setSenderID(-1);
+
+            sendDirect(res, config->getNodeGate(userId, -1));
         }
         delete(fr);
     }

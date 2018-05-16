@@ -20,7 +20,7 @@ void Node::initialize()
 {
     float r2 = static_cast <float> (rand()) * 2 / (static_cast <float> (RAND_MAX));
     cMessage *msg = new cMessage("message");
-    scheduleAt(simTime() + r2, msg); // mesaj propriu -> peste un timp
+    scheduleAt(simTime() + r2, msg);
     status[0] = status[1] = status[2] = NONE;
 
     D2DCommunication = registerSignal("D2DCommunication");
@@ -43,7 +43,6 @@ void Node::initialize()
     reg->setY(this->y);
     reg->setSenderId(this->id);
 
-    //send(reg, "register$o");
     sendDirect(reg, config->geteNBControlGate(id));
 }
 
@@ -62,7 +61,8 @@ void Node::handleMessage(cMessage *msg)
             payload p;
             p.fileId = fileId;
             data_packet->setData(p);
-            send(data_packet, "out", 0);
+
+            sendDirect(data_packet, config->getENBGate(id));
 
             status[fileId] = DOWNLOAD;
         }
@@ -80,8 +80,9 @@ void Node::handleMessage(cMessage *msg)
 
         Data_packet *res = createFileResponse(userId, fileId, seq + 1);
         res->setIsD2D(true);
+        res->setSenderID(id);
 
-        send(res, "out", userId + 1);
+        sendDirect(res, config->getNodeGate(userId, id));
 
         delete(msg);
     }
@@ -110,8 +111,11 @@ void Node::handleMessage(cMessage *msg)
                 emit(D2ICommunication, dp->getSize());
             }
 
-            //send(response, "out");
-            send(response, "out", dp->getArrivalGate()->getIndex());
+            int sId = dp->getSenderID();
+            if (sId < 0)
+                sendDirect(response, config->getENBGate(id));
+            else
+                sendDirect(response, config->getNodeGate(dp->getSenderID(), id));
         }
         else if (dp->getType() == FILE_END)
         {
@@ -126,7 +130,13 @@ void Node::handleMessage(cMessage *msg)
             updateProgress(userId, fileId, size);
             Data_packet *res = createFileResponse(userId, fileId, seqNum);
             res->setIsD2D(true);
-            send(res, "out", dp->getArrivalGate()->getIndex());
+            res->setSenderID(id);
+
+            int sId = dp->getSenderID();
+            if (sId < 0)
+                sendDirect(res, config->getENBGate(id));
+            else
+                sendDirect(res, config->getNodeGate(dp->getSenderID(), id));
         }
 
             delete dp;

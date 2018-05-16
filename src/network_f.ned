@@ -33,21 +33,5 @@ network final_net
         {
             //@display("p=200,200");
         };
-        //ac : Node;
-        
-     connections:
-        for i = 0..(size - 1)
-        {
-            n[i].in[0]  <-- { delay = uniform(10us, 100us); } <-- enb.out[i];
-        	n[i].out[0] --> { delay = uniform(10us, 100us); } --> enb.in[i];
-        	//n[i].register <--> enb.register[i];
-        }
-        
-        for i = 0..(size - 1), for j = 0..(size - 1), if i != j
-        {
-            n[i].in++ <-- { delay = uniform(10us, 100us); } <-- n[j].out++;
-            n[i].out++ --> { delay = uniform(10us, 100us); } --> n[j].in++;
-        }
-        
 }
 
