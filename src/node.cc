@@ -32,43 +32,75 @@ void Node::initialize()
     config = check_and_cast <Configurator*> (Configurator::getConfigurator(this));
 
     cRNG *random = this->getRNG(0);
-    x = random->intRand(100); // x in the range of 0 to 100
-    y = random->intRand(100); // y in the range of 0 to 100    getDisplayString()->setTagArg("p", 0, pos.x);
 
-    this->getDisplayString().setTagArg("p", 0, x);
-    this->getDisplayString().setTagArg("p", 1, y);
+    // new development
+
+    double dRadius = config->par("radius");
+    double dCx = config->par("cx");
+    double dCy = config->par("cy");
+    double dDeltaHeadingMax = config->par("deltaHeadingMax");
+    double dVelocityMax = config->par("velocityMax");
+
+    // Dir is an angle, distance is between 1 and radius
+    double dDir = random->doubleRand() * 2 * PI;
+    double dDistance = random->doubleRand() * (dRadius - 1) + 1;
+
+    double dHeadingCenter = PI - dDir;
+
+    m_dPosX = dCx + (dDistance * cos(dDir));
+    m_dPosY = dCy + (dDistance * sin(dDir));
+
+    m_dVelocity = random->doubleRand() * (dVelocityMax - 1) + 1;
+    m_dHeading = dHeadingCenter + random->doubleRand() * (dDeltaHeadingMax * 2) - dDeltaHeadingMax;
+
+
+    this->getDisplayString().setTagArg("p", 0, (long) m_dPosX);
+    this->getDisplayString().setTagArg("p", 1, (long) m_dPosY);
 
     Register *reg = new Register("Register");
-    reg->setX(this->x);
-    reg->setY(this->y);
+    reg->setX((int) m_dPosX);
+    reg->setY((int) m_dPosY);
     reg->setSenderId(this->id);
 
     sendDirect(reg, config->geteNBControlGate(id));
+
+    cMessage *update = new cMessage("position");
+    double interval = config->par("updateInterval");
+    m_dUpdateInterval = (interval / m_dVelocity) / 1000;
+    scheduleAt(simTime() + m_dUpdateInterval, update);
 }
 
 void Node::handleMessage(cMessage *msg)
 {
     if (msg->isSelfMessage())
     {
-        int fileId = static_cast <int> (rand()) % 3;
-        if (status[fileId] == NONE)
+        if (strcmp(msg->getName(), "position") == 0)
         {
-            Data_packet *data_packet = new Data_packet("Req");
-            data_packet->setIsRequest(true);
-            data_packet->setType(FILE_REQUEST);
-            data_packet->setSequenceNumber(0);
-            data_packet->setSenderID(this->id);
-            payload p;
-            p.fileId = fileId;
-            data_packet->setData(p);
-
-            sendDirect(data_packet, config->getENBGate(id));
-
-            status[fileId] = DOWNLOAD;
+            updatePosition();
+            delete(msg);
         }
+        else
+        {
+            int fileId = static_cast <int> (rand()) % 3;
+            if (status[fileId] == NONE)
+            {
+                Data_packet *data_packet = new Data_packet("Req");
+                data_packet->setIsRequest(true);
+                data_packet->setType(FILE_REQUEST);
+                data_packet->setSequenceNumber(0);
+                data_packet->setSenderID(this->id);
+                payload p;
+                p.fileId = fileId;
+                data_packet->setData(p);
 
-        float r2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
-        scheduleAt((simTime()+r2), msg);
+                sendDirect(data_packet, config->getENBGate(id));
+
+                status[fileId] = DOWNLOAD;
+            }
+
+            float r2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
+            scheduleAt((simTime()+r2), msg);
+        }
     }
     else if (msg->arrivedOn("register$i"))
     {
@@ -142,3 +174,18 @@ void Node::handleMessage(cMessage *msg)
             delete dp;
     }
 }
+
+void
+Node::updatePosition()
+{
+    m_dPosX += m_dVelocity * cos(m_dHeading);
+    m_dPosY += m_dVelocity * sin(m_dHeading);
+
+    this->getDisplayString().setTagArg("p", 0, (long) m_dPosX);
+    this->getDisplayString().setTagArg("p", 1, (long) m_dPosY);
+
+    cMessage *update = new cMessage("position");
+
+    scheduleAt(simTime() + m_dUpdateInterval, update);
+}
+

@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.3 from data_packet.msg.
+// Generated file, do not edit! Created by nedtool 5.4 from data_packet.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:

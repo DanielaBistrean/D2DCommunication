@@ -21,10 +21,18 @@ class Node : public cSimpleModule, public FileTransfer
     int status[3];
     static int count;
     int id;
-    int x, y;
     simsignal_t D2DCommunication;
     simsignal_t D2ICommunication;
     Configurator* config;
+
+    // new development
+    double m_dPosX;
+    double m_dPosY;
+    double m_dVelocity;
+    double m_dHeading;
+    double m_dUpdateInterval;
+
+    void updatePosition();
 };
 
 #endif

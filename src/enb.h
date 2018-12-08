@@ -21,7 +21,7 @@ class Enb : public cSimpleModule, public FileTransfer
 
   private:
     int user_pos[20][2] = { {0} }; //20 users; 2 - x, y
-    int enb_x, enb_y;
+    double enb_x, enb_y;
     int nearestN(int userId, int fileId);
     Configurator* config;
 };

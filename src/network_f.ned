@@ -23,6 +23,9 @@ network final_net
         int size = default(10);
         n[*].size = size;
         config.size = size;
+        
+        @display("bgb=2000,2000;");
+
     submodules:     
         config : Configurator;  
         n[size] : Node

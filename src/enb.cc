@@ -11,13 +11,19 @@ Define_Module(Enb);
 
 void Enb::initialize()
 {
-    enb_x = 50;
-    enb_y = 50;
-
-    this->getDisplayString().setTagArg("p", 0, enb_x);
-    this->getDisplayString().setTagArg("p", 1, enb_y);
-
     config = check_and_cast <Configurator*> (Configurator::getConfigurator(this));
+
+    // new development
+    enb_x = config->par("cx");
+    enb_y = config->par("cy");
+    double dRadius = config->par("radius");
+
+    EV << "enb at pos " << enb_x << "," << enb_y;
+
+    this->getDisplayString().setTagArg("p", 0, (int) enb_x);
+    this->getDisplayString().setTagArg("p", 1, (int) enb_y);
+
+    this->getDisplayString().setTagArg("r", 0, (int) dRadius);
 }
 
 

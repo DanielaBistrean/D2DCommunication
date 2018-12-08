@@ -19,6 +19,15 @@ Define_Module(Configurator);
 
 void Configurator::initialize()
 {
+    // new development
+    double x = par("cx");
+    double y = par("cy");
+    double dRadius = par("radius");
+
+    this->getDisplayString().setTagArg("p", 0, (int) (x + dRadius));
+    this->getDisplayString().setTagArg("p", 1, (int) (y + dRadius));
+
+
     int size = par("size");
     enb = this->getParentModule()->getSubmodule("enb");
     nodes = new cModule* [size];

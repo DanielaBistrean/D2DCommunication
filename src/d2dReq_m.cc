@@ -1,5 +1,5 @@
 //
-// Generated file, do not edit! Created by nedtool 5.3 from d2dReq.msg.
+// Generated file, do not edit! Created by nedtool 5.4 from d2dReq.msg.
 //
 
 // Disable warnings about unused variables, empty switch stmts, etc:

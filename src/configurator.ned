@@ -22,4 +22,13 @@ simple Configurator
 {
     parameters:
     	int size = default(10);
+        
+        // new development
+        double radius = default(1000);
+        double cx = default(radius);
+        double cy = default(radius);
+        double deltaHeadingMax = default(30);
+        double velocityMax = default(15);
+        
+        double updateInterval = default(1000); //1000ms
 }
