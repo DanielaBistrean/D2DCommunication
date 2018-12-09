@@ -181,6 +181,18 @@ Node::updatePosition()
     m_dPosX += m_dVelocity * cos(m_dHeading);
     m_dPosY += m_dVelocity * sin(m_dHeading);
 
+    double dRadius = config->par("radius");
+    double dCx = config->par("cx");
+    double dCy = config->par("cy");
+
+    double dDist = sqrt((dCx - m_dPosX) * (dCx - m_dPosX) + (dCy - m_dPosY) * (dCy - m_dPosY));
+    if (dDist > dRadius)
+    {
+        // node is outside of radius, replace it at the other side of the circle
+        m_dPosX = (2 * dCx) - m_dPosX;
+        m_dPosY = (2 * dCy) - m_dPosY;
+    }
+
     this->getDisplayString().setTagArg("p", 0, (long) m_dPosX);
     this->getDisplayString().setTagArg("p", 1, (long) m_dPosY);
 
