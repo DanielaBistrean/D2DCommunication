@@ -22,7 +22,7 @@
     typedef struct _payload
     {
         int fileId; 		     //if file request
-        char fileData[4096]; 	// if file data response
+        char fileData[1500]; 	// if file data response
         
     } payload;
 // }}

@@ -46,8 +46,8 @@ Data_packet* FileTransfer::createFileResponse(int userId, int fileId, int seqNum
         res->setSequenceNumber(seqNumber);
         payload p;
         p.fileId = fileId;
-        if ((fsize[fileId] - progress[fileId][userId]) > 4096)
-            toSend = 4096;
+        if ((fsize[fileId] - progress[fileId][userId]) > 1500)
+            toSend = 1500;
         else
             toSend = fsize[fileId] - progress[fileId][userId];
 
