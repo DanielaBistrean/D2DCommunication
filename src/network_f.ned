@@ -32,7 +32,7 @@ network final_net
         {
             //@display("p=100,100,ri,100,100");
         };
-        enb    : Enb
+        gNB    : Enb
         {
             //@display("p=200,200");
         };

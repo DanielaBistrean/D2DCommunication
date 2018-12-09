@@ -29,7 +29,7 @@ void Configurator::initialize()
 
 
     int size = par("size");
-    enb = this->getParentModule()->getSubmodule("enb");
+    enb = this->getParentModule()->getSubmodule("gNB");
     nodes = new cModule* [size];
     for(int i = 0; i < size; i++)
         nodes[i] = this->getParentModule()->getSubmodule("n", i);
