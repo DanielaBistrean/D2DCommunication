@@ -13,23 +13,18 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+#include "FileData.h"
 
-//
-// TODO auto-generated module
-//
-simple Configurator
-{
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
-}
+FileData::FileData()
+: m_size(0)
+, m_numBlocks(0)
+, m_lastUsed(0)
+{}
+
+FileData::FileData(int size, int blockSize)
+: m_size(size)
+, m_numBlocks((1 + ((size - 1)) / blockSize))
+, m_lastUsed(0)
+{}
+
+

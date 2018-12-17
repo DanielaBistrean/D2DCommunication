@@ -3,8 +3,11 @@
 #define __D2DCOMMUNICATION_NODE_H_
 
 #include <omnetpp.h>
+#include <queue>
 #include "FileTransfer.h"
 #include "configurator.h"
+#include "FileCache.h"
+#include "FileInfoResponse.h"
 
 using namespace omnetpp;
 
@@ -13,9 +16,14 @@ using namespace omnetpp;
  */
 class Node : public cSimpleModule, public FileTransfer
 {
+public:
+    double  getX()   { return m_dPosX; }
+    double  getY()   { return m_dPosY; }
+    int     getId()  { return id; }
   protected:
     virtual void initialize();
     virtual void handleMessage(cMessage *msg);
+    virtual void finish();
 
   private:
     int status[3];
@@ -33,6 +41,8 @@ class Node : public cSimpleModule, public FileTransfer
     double m_dUpdateInterval;
 
     void updatePosition();
+    FileCache m_cache;
+    std::queue<FileInfoMessage> m_currentRequestList;
 };
 
 #endif

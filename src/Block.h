@@ -13,23 +13,23 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+#ifndef BLOCK_H_
+#define BLOCK_H_
 
-//
-// TODO auto-generated module
-//
-simple Configurator
-{
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
-}
+#include <omnetpp.h>
+
+using namespace omnetpp;
+
+class Block {
+public:
+    Block();
+
+    bool isPresent()        { return m_isPresent; }
+    simtime_t getLastUsed() { return m_lastUsed; }
+
+private:
+    bool m_isPresent;
+    simtime_t m_lastUsed;
+};
+
+#endif /* BLOCK_H_ */

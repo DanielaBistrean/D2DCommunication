@@ -13,23 +13,26 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+#ifndef NETWORKABSTRACTION_H_
+#define NETWORKABSTRACTION_H_
 
-//
-// TODO auto-generated module
-//
-simple Configurator
+#include <vector>
+
+#include "node.h"
+
+class NetworkAbstraction
 {
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
-}
+public:
+    virtual ~NetworkAbstraction();
+    static NetworkAbstraction& getInstance();
+    NetworkAbstraction(NetworkAbstraction const&) = delete;
+    void operator=(NetworkAbstraction const&) = delete;
+    void registerUser(Node *user);
+    void deregisterUser(Node *user);
+    unsigned int broadcast(Node *user, cMessage *msg, unsigned int maxRange = 0);
+private:
+    NetworkAbstraction();
+    std::vector<Node *> m_vUsers;
+};
+
+#endif /* NETWORKABSTRACTION_H_ */

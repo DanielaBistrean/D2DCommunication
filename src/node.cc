@@ -5,6 +5,10 @@
 #include "data_packet_types.h"
 #include "Register_m.h"
 #include "d2dReq_m.h"
+#include "NetworkAbstraction.h"
+#include "broadcast_m.h"
+#include "FileInfoMessage_m.h"
+#include "timeout_m.h"
 
 #define NONE 0
 #define DOWNLOAD 1
@@ -22,6 +26,9 @@ void Node::initialize()
     cMessage *msg = new cMessage("message");
     scheduleAt(simTime() + r2, msg);
     status[0] = status[1] = status[2] = NONE;
+
+    m_cache.setBlockSize(4096);
+    m_cache.setMaxSize(0);
 
     D2DCommunication = registerSignal("D2DCommunication");
     D2ICommunication = registerSignal("D2ICommunication");
@@ -57,51 +64,145 @@ void Node::initialize()
     this->getDisplayString().setTagArg("p", 0, (long) m_dPosX);
     this->getDisplayString().setTagArg("p", 1, (long) m_dPosY);
 
-    Register *reg = new Register("Register");
-    reg->setX((int) m_dPosX);
-    reg->setY((int) m_dPosY);
-    reg->setSenderId(this->id);
+    //my modif
+//    Register *reg = new Register("Register");
+//    reg->setX((int) m_dPosX);
+//    reg->setY((int) m_dPosY);
+//    reg->setSenderId(this->id);
 
-    sendDirect(reg, config->geteNBControlGate(id));
+//    sendDirect(reg, config->geteNBControlGate(id));
 
     cMessage *update = new cMessage("position");
     double interval = config->par("updateInterval");
     m_dUpdateInterval = (interval / m_dVelocity) / 1000;
     scheduleAt(simTime() + m_dUpdateInterval, update);
+
+    NetworkAbstraction &na = NetworkAbstraction::getInstance();
+    na.registerUser(this);
 }
 
 void Node::handleMessage(cMessage *msg)
 {
-    if (msg->isSelfMessage())
+//    if (strcmp(msg->getName(), "HELLO!") == 0)
+//    {
+//        delete (msg);
+//        return;
+//    }
+//    cMessage *test = new cMessage("HELLO!");
+    NetworkAbstraction &na = NetworkAbstraction::getInstance();
+//    na.broadcast(this, test, 500);
+//    delete test;
+
+    if (strcmp(msg->getClassName(), "Broadcast") == 0)
+    {
+        FileInfoMessage *fim = new FileInfoMessage("FIM");
+
+        Broadcast *bcast = check_and_cast<Broadcast*> (msg);
+
+        std::vector<int> fimData;
+        int fileId = bcast->getBfileId();
+        int senderId = bcast->getBuserId();
+
+        if (m_cache.findFile(fileId))
+        {
+            FileData &fd = m_cache.getFile(fileId);
+            std::vector<Block> &blocks = fd.getBlocks();
+
+            for (int i = 0; i < blocks.size(); i++)
+            {
+                if (blocks[i].isPresent())
+                    fimData.push_back(i);
+            }
+            fim->setBlocks(fimData);
+
+            sendDirect(fim, config->getNodeGate(senderId, id));
+        }
+
+//        Data_packet *bres = createFileResponse(userId, fileId, seq + 1);
+//        bres->setIsD2D(true);
+//        bres->setSenderID(id);
+
+        delete(msg);
+    }
+
+    else if (msg->isSelfMessage())
     {
         if (strcmp(msg->getName(), "position") == 0)
         {
             updatePosition();
             delete(msg);
         }
+        else if (strcmp(msg->getClassName(), "Timeout") == 0)
+        {
+            Timeout *t = check_and_cast<Timeout*> (msg);
+
+//            m_cache.createFile(t->getFileId(), ) // add here the file size.
+
+            bool isComplete = false;
+
+            while (!m_currentRequestList.empty())
+            {
+                FileInfoMessage fim = m_currentRequestList.front();
+                m_currentRequestList.pop();
+
+                int numBlocks = fim.getNumBlocks();
+
+                std::vector<int> blockI = fim.getBlocks();
+                for (auto i : blockI)
+                {
+
+                }
+            }
+        }
         else
         {
-            int fileId = static_cast <int> (rand()) % 3;
-            if (status[fileId] == NONE)
+            int fileId = static_cast <int> (rand()) % 3; // choose a file
+
+            if (!m_cache.findFile(fileId))
             {
-                Data_packet *data_packet = new Data_packet("Req");
-                data_packet->setIsRequest(true);
-                data_packet->setType(FILE_REQUEST);
-                data_packet->setSequenceNumber(0);
-                data_packet->setSenderID(this->id);
-                payload p;
-                p.fileId = fileId;
-                data_packet->setData(p);
+                Broadcast *bMsg = new Broadcast("Broadcast");
+                bMsg->setBfileId(fileId);
+                bMsg->setBuserId(this->id);
 
-                sendDirect(data_packet, config->getENBGate(id));
+                Timeout *timeout = new Timeout("Timeout");
+                timeout->setFileId(fileId);
 
-                status[fileId] = DOWNLOAD;
+                na.broadcast(this, bMsg, 500);
+                scheduleAt(simTime() + 0.05, timeout);
+
             }
+
+
+//            if (status[fileId] == NONE)
+//            {
+//                Data_packet *data_packet = new Data_packet("Req");
+//                data_packet->setIsRequest(true);
+//                data_packet->setType(FILE_REQUEST);
+//                data_packet->setSequenceNumber(0);
+//                data_packet->setSenderID(this->id);
+//                payload p;
+//                p.fileId = fileId;
+//                data_packet->setData(p);
+//
+//                Broadcast *bMsg = new Broadcast("Broadcast");
+//                bMsg->setBfileId(fileId);
+//                bMsg->setBuserId(this->id);
+//
+//                na.broadcast(this, bMsg, 500);
+//
+//
+//                // sent the msg to enb
+//                sendDirect(data_packet, config->getENBGate(id));
+//
+//
+//                status[fileId] = DOWNLOAD;
+//            }
 
             float r2 = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX));
             scheduleAt((simTime()+r2), msg);
         }
     }
+
     else if (msg->arrivedOn("register$i"))
     {
         D2dReq *req = static_cast <D2dReq*> (msg);
@@ -200,4 +301,12 @@ Node::updatePosition()
 
     scheduleAt(simTime() + m_dUpdateInterval, update);
 }
+
+void
+Node::finish()
+{
+    NetworkAbstraction &na = NetworkAbstraction::getInstance();
+    na.deregisterUser(this);
+}
+
 

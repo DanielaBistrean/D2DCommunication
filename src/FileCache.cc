@@ -13,23 +13,33 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+#include "FileCache.h"
 
-//
-// TODO auto-generated module
-//
-simple Configurator
+FileCache::FileCache()
+: m_dblockSize(0)
+, m_dmaxSize(0)
+{}
+
+FileData&
+FileCache::getFile(int fileName)
 {
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
+    auto it = m_files.find(fileName);
+    if (it != m_files.end())
+        return it->second;
 }
+
+bool
+FileCache::findFile(int fileName)
+{
+    auto it = m_files.find(fileName);
+    return (it != m_files.end());
+}
+
+FileData&
+FileCache::createFile(int fileName, int FileS)
+{
+    m_files.insert(std::make_pair(fileName, FileData(FileS, m_dblockSize)));
+    return getFile(fileName);
+}
+
+

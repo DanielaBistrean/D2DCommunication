@@ -31,19 +31,30 @@ O = $(PROJECT_OUTPUT_DIR)/$(CONFIGNAME)/$(PROJECTRELATIVE_PATH)
 
 # Object files for local .cc, .msg and .sm files
 OBJS = \
+    $O/Block.o \
     $O/configurator.o \
     $O/enb.o \
+    $O/FileCache.o \
+    $O/FileData.o \
+    $O/FileInfoResponse.o \
     $O/FileTransfer.o \
+    $O/NetworkAbstraction.o \
     $O/node.o \
+    $O/broadcast_m.o \
     $O/d2dReq_m.o \
     $O/data_packet_m.o \
-    $O/Register_m.o
+    $O/FileInfoMessage_m.o \
+    $O/Register_m.o \
+    $O/timeout_m.o
 
 # Message files
 MSGFILES = \
+    broadcast.msg \
     d2dReq.msg \
     data_packet.msg \
-    Register.msg
+    FileInfoMessage.msg \
+    Register.msg \
+    timeout.msg
 
 # SM files
 SMFILES =

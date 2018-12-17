@@ -13,23 +13,30 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+//
+// TODO generated message class
+//
+cplusplus 
+{{
+    typedef struct _payload
+    {
+        int blockId;
+        int fileId; 		     //if file request
+        char fileData[1500]; 	// if file data response
+        std::vector<int> blocks;
+        
+    } payload;
+}}
 
-//
-// TODO auto-generated module
-//
-simple Configurator
-{
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
+class noncobject payload;
+ 
+packet Data_packet2 {
+    bool isRequest;
+    int sequenceNumber;
+    int type;
+    int senderID;
+    int size;
+    payload data;
+    bool isD2D;
 }
+

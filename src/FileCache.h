@@ -13,23 +13,28 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+#ifndef FILECACHE_H_
+#define FILECACHE_H_
 
-//
-// TODO auto-generated module
-//
-simple Configurator
-{
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
-}
+#include <map>
+#include "FileData.h"
+
+class FileCache {
+public:
+    FileCache();
+
+    void setBlockSize(int blockSize)     { m_dblockSize = blockSize; }
+    void setMaxSize(int maxSize)         { m_dmaxSize   = maxSize;   }
+    int getBlockSize()                   { return m_dblockSize; }
+    int getMaxSize()                     { return m_dmaxSize;   }
+    FileData& getFile(int fileName);
+    bool findFile(int fileName);
+    FileData& createFile(int fileName, int FileS);
+
+private:
+    int m_dblockSize;
+    int m_dmaxSize;
+    std::map<int, FileData> m_files;
+};
+
+#endif /* FILECACHE_H_ */

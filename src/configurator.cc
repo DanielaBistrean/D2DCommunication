@@ -23,6 +23,7 @@ void Configurator::initialize()
     double x = par("cx");
     double y = par("cy");
     double dRadius = par("radius");
+    double dD2DMaxRange = par("dD2DMaxRange");
 
     this->getDisplayString().setTagArg("p", 0, (int) (x + dRadius));
     this->getDisplayString().setTagArg("p", 1, (int) (y + dRadius));

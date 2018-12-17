@@ -13,23 +13,10 @@
 // along with this program.  If not, see http://www.gnu.org/licenses/.
 // 
 
-package d2dcommunication;
+#include "FileInfoResponse.h"
 
-//
-// TODO auto-generated module
-//
-simple Configurator
-{
-    parameters:
-    	int size = default(10);
-        
-        // new development
-        double radius = default(1000);
-        double cx = default(radius);
-        double cy = default(radius);
-        double deltaHeadingMax = default(30);
-        double velocityMax = default(15);
-        
-        double updateInterval = default(1000); //1000ms
-        double dD2DMaxRange = default(1000);
-}
+FileInfoResponse::FileInfoResponse(int uid, int fid)
+: m_uid(uid)
+, m_fid(fid)
+{}
+
