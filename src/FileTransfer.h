@@ -30,6 +30,7 @@ protected:
     virtual Data_packet* createFileResponse(int userId, int fileId, int seqNumber);
     virtual void updateProgress(int userId, int fileId, int bytes_sent);
     virtual int getFileStatus(int userId, int fileId);
+//    virtual int getFilesNumber();
 private:
     char *files[3];
     int fsize[3];

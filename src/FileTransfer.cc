@@ -24,7 +24,8 @@ FileTransfer::FileTransfer() {
     files[0] = files[1] = files[2] = 0;
 
 
-    fsize[0] = 12582912;
+    //fsize[0] = 12582912;
+    fsize[0] = 12582;
     fsize[1] = fsize[2] = 3145728;
 
     files[0] = (char*) malloc(sizeof(char) * fsize[0]);
@@ -56,7 +57,7 @@ Data_packet* FileTransfer::createFileResponse(int userId, int fileId, int seqNum
         res->setSize(toSend);
 
         EV << "Sending " << toSend << " bytes to node " << userId << endl;
-        EV << "Node " << userId << " downloaded " << progress[fileId][userId] << " bytes from file " << fileId << endl;
+        EV << "Node " << userId << " downloaded " << progress[fileId][userId] << " bytes / " << fsize[fileId] << " from file " << fileId << endl;
 
         f[fileId][userId] = DOWNLOAD;
         return res;
@@ -97,6 +98,11 @@ int FileTransfer::getFileStatus(int userId, int fileId)
 {
     return f[fileId][userId];
 }
+
+//int FileTransfer::getFilesNumber()
+//{
+//    return (sizeof(files) / sizeof(files[0]));
+//}
 
 FileTransfer::~FileTransfer() {
     free(files[0]);

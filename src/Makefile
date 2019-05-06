@@ -43,6 +43,7 @@ OBJS = \
     $O/broadcast_m.o \
     $O/d2dReq_m.o \
     $O/data_packet_m.o \
+    $O/data_packet2_m.o \
     $O/FileInfoMessage_m.o \
     $O/Register_m.o \
     $O/timeout_m.o
@@ -52,6 +53,7 @@ MSGFILES = \
     broadcast.msg \
     d2dReq.msg \
     data_packet.msg \
+    data_packet2.msg \
     FileInfoMessage.msg \
     Register.msg \
     timeout.msg

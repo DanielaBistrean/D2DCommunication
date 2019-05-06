@@ -81,6 +81,17 @@ void Node::initialize()
     na.registerUser(this);
 }
 
+bool Node::inDownload()
+{
+    for(int s : status)
+    {
+        if(s == DOWNLOAD)
+            return true;
+    }
+
+    return false;
+}
+
 void Node::handleMessage(cMessage *msg)
 {
 //    if (strcmp(msg->getName(), "HELLO!") == 0)
@@ -92,8 +103,9 @@ void Node::handleMessage(cMessage *msg)
     NetworkAbstraction &na = NetworkAbstraction::getInstance();
 //    na.broadcast(this, test, 500);
 //    delete test;
+    EV << "handleMessage? " << msg->getDisplayString()<< std::endl;
 
-    if (strcmp(msg->getClassName(), "Broadcast") == 0)
+    if (strcmp(msg->getName(), "Broadcast") == 0) // getClassNAme
     {
         FileInfoMessage *fim = new FileInfoMessage("FIM");
 
@@ -103,6 +115,7 @@ void Node::handleMessage(cMessage *msg)
         int fileId = bcast->getBfileId();
         int senderId = bcast->getBuserId();
 
+        EV << "Broadcast?" << std::endl;
         if (m_cache.findFile(fileId))
         {
             FileData &fd = m_cache.getFile(fileId);
@@ -114,8 +127,11 @@ void Node::handleMessage(cMessage *msg)
                     fimData.push_back(i);
             }
             fim->setBlocks(fimData);
+            fim->setUId(id);
+            EV << "Broadcast - findFile()?" << std::endl;
 
             sendDirect(fim, config->getNodeGate(senderId, id));
+//            status[fileId] = DOWNLOAD;
         }
 
 //        Data_packet *bres = createFileResponse(userId, fileId, seq + 1);
@@ -127,38 +143,83 @@ void Node::handleMessage(cMessage *msg)
 
     else if (msg->isSelfMessage())
     {
+        EV << "Self message: " << msg->getName() << std::endl;
         if (strcmp(msg->getName(), "position") == 0)
         {
             updatePosition();
             delete(msg);
         }
-        else if (strcmp(msg->getClassName(), "Timeout") == 0)
+        else if (strcmp(msg->getName(), "Timeout") == 0)
         {
             Timeout *t = check_and_cast<Timeout*> (msg);
+            EV << "Timeout arrived for " << id << std::endl;
 
 //            m_cache.createFile(t->getFileId(), ) // add here the file size.
 
             bool isComplete = false;
+            int fileId = 0;
+//                    static_cast <int> (rand()) % 3;
 
-            while (!m_currentRequestList.empty())
+            if (!m_currentRequestList.empty() && !inDownload())
             {
-                FileInfoMessage fim = m_currentRequestList.front();
+                FileInfoMessage *fim = m_currentRequestList.front();
                 m_currentRequestList.pop();
 
-                int numBlocks = fim.getNumBlocks();
+                Data_packet *data_packet = new Data_packet("Req");
 
-                std::vector<int> blockI = fim.getBlocks();
-                for (auto i : blockI)
+                data_packet->setIsRequest(true);
+                data_packet->setType(FILE_REQUEST);
+                data_packet->setSequenceNumber(0);
+                data_packet->setSenderID(this->id);
+                payload p;
+                p.fileId = fileId;
+                data_packet->setData(p);
+
+                EV << "Timeout?" << std::endl;
+                sendDirect(data_packet, config->getNodeGate(fim->getUId(), id));
+                status[fileId] = DOWNLOAD;
+
+                while(!m_currentRequestList.empty())
                 {
-
+                    m_currentRequestList.pop();
                 }
+
+//                int numBlocks = fim.getNumBlocks();
+//
+//                std::vector<int> blockI = fim.getBlocks();
+//                for (auto i : blockI)
+//                {
+//
+//                }
+            }
+            else if (!inDownload())
+            {
+                int fileId = 0;
+//                        static_cast <int> (rand()) % 3;
+
+                Data_packet *data_packet = new Data_packet("Req");
+
+                data_packet->setIsRequest(true);
+                data_packet->setType(FILE_REQUEST);
+                data_packet->setSequenceNumber(0);
+                data_packet->setSenderID(this->id);
+                payload p;
+                p.fileId = fileId;
+                data_packet->setData(p);
+
+                EV << "Req?" << std::endl;
+
+                sendDirect(data_packet, 0.05, 0.01, config->getENBGate(id));
+//                sendDirect(data_packet, config->getENBGate(id));
+                status[fileId] = DOWNLOAD;
             }
         }
         else
         {
-            int fileId = static_cast <int> (rand()) % 3; // choose a file
+            int fileId = 0;
+//                    static_cast <int> (rand()) % 3; // choose a file
 
-            if (!m_cache.findFile(fileId))
+            if (/*!m_cache.findFile(fileId) &&*/ !inDownload())
             {
                 Broadcast *bMsg = new Broadcast("Broadcast");
                 bMsg->setBfileId(fileId);
@@ -168,7 +229,7 @@ void Node::handleMessage(cMessage *msg)
                 timeout->setFileId(fileId);
 
                 na.broadcast(this, bMsg, 500);
-                scheduleAt(simTime() + 0.05, timeout);
+                scheduleAt(simTime() + 0.5, timeout);
 
             }
 
@@ -215,13 +276,27 @@ void Node::handleMessage(cMessage *msg)
         res->setIsD2D(true);
         res->setSenderID(id);
 
-        sendDirect(res, config->getNodeGate(userId, id));
+        EV << "register?" << std::endl;
+
+        sendDirect(res, 0.05, 0.01, config->getNodeGate(userId, id));
+//        sendDirect(res, config->getNodeGate(userId, id));
 
         delete(msg);
     }
     else
     {
-        Data_packet *dp = static_cast <Data_packet*> (msg);
+        Data_packet *dp = nullptr;
+        try
+        {
+            dp = check_and_cast <Data_packet*> (msg);
+        }
+        catch (...){};
+
+        if (!dp)
+        {
+            FileInfoMessage *dp = static_cast <FileInfoMessage*> (msg);
+            m_currentRequestList.push(dp);
+        } else
         if (dp->getType() == FILE_RESPONSE)
         {
             Data_packet *response = new Data_packet("ACK");
@@ -237,22 +312,27 @@ void Node::handleMessage(cMessage *msg)
             bool isD2D = dp->getIsD2D();
             if (isD2D)
             {
-                emit(D2DCommunication, dp->getSize());
+                emit(D2DCommunication, (unsigned long)dp->getSize());
             }
             else
             {
-                emit(D2ICommunication, dp->getSize());
+                emit(D2ICommunication, (unsigned long)dp->getSize());
             }
 
             int sId = dp->getSenderID();
+            EV << "sID = " << sId << std::endl;
+
             if (sId < 0)
-                sendDirect(response, config->getENBGate(id));
+                sendDirect(response, 0.05, 0.01, config->getENBGate(id));
+//                sendDirect(response, config->getENBGate(id));
             else
-                sendDirect(response, config->getNodeGate(dp->getSenderID(), id));
+                sendDirect(response, 0.05, 0.01, config->getNodeGate(dp->getSenderID(), id));
+//                sendDirect(response, config->getNodeGate(dp->getSenderID(), id));
         }
         else if (dp->getType() == FILE_END)
         {
             status[dp->getData().fileId] = READY;
+            m_cache.createFile(dp->getData().fileId, 12582);
         }
         else if (dp->getType() == FILE_ACK)
         {
@@ -267,9 +347,33 @@ void Node::handleMessage(cMessage *msg)
 
             int sId = dp->getSenderID();
             if (sId < 0)
-                sendDirect(res, config->getENBGate(id));
+                sendDirect(res, 0.05, 0.01, config->getENBGate(id));
+//                sendDirect(res, config->getENBGate(id));
             else
-                sendDirect(res, config->getNodeGate(dp->getSenderID(), id));
+                sendDirect(res, 0.05, 0.01, config->getNodeGate(dp->getSenderID(), id));
+//                sendDirect(res, config->getNodeGate(dp->getSenderID(), id));
+        }
+        else if (dp->getType() == FILE_REQUEST)
+        {
+
+            int fileId = dp->getData().fileId;
+            int userId = dp->getSenderID();
+            int seqNum = dp->getSequenceNumber();
+
+//            if (nearest == -1)
+            Data_packet *res = createFileResponse(userId, fileId, seqNum + 1);
+//            else
+//            {
+//                D2dReq *d2d = new D2dReq("D2D");
+//                d2d->setUserId(userId);
+//                d2d->setFileId(fileId);
+//                d2d->setSeq(seqNum);
+//
+//                sendDirect(d2d, config->getNodeControlGate(nearest));
+//            }
+
+             sendDirect(res, 0.05, 0.01, config->getNodeGate(dp->getSenderID(), id));
+
         }
 
             delete dp;

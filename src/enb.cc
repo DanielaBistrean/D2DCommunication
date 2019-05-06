@@ -49,7 +49,7 @@ int Enb::nearestN(int userId, int fileId)
               minId = i;
           }
 
-          EV << "Distance from " << " userId " << " to " << i << " is " << distNcN << endl;
+          EV << "Distance from " << userId << " to " << i << " is " << distNcN << endl;
 
       }
     }
@@ -90,17 +90,17 @@ void Enb::handleMessage(cMessage *msg)
         {
             int nearest = nearestN(userId, fileId);
             EV << "Nearest for user " << userId << " file " << fileId << " is" << nearest << endl;
-            if (nearest == -1)
+//            if (nearest == -1)
                 res = createFileResponse(userId, fileId, seqNum + 1);
-            else
-            {
-                D2dReq *d2d = new D2dReq("D2D");
-                d2d->setUserId(userId);
-                d2d->setFileId(fileId);
-                d2d->setSeq(seqNum);
-
-                sendDirect(d2d, config->getNodeControlGate(nearest));
-            }
+//            else
+//            {
+//                D2dReq *d2d = new D2dReq("D2D");
+//                d2d->setUserId(userId);
+//                d2d->setFileId(fileId);
+//                d2d->setSeq(seqNum);
+//
+//                sendDirect(d2d, config->getNodeControlGate(nearest));
+//            }
 
         }
         else if (fr->getType() == FILE_ACK)
@@ -114,7 +114,7 @@ void Enb::handleMessage(cMessage *msg)
             res->setIsD2D(false);
             res->setSenderID(-1);
 
-            sendDirect(res, config->getNodeGate(userId, -1));
+            sendDirect(res, 0.05, 0.01, config->getNodeGate(userId, -1));
         }
         delete(fr);
     }

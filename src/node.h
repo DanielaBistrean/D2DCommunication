@@ -8,6 +8,7 @@
 #include "configurator.h"
 #include "FileCache.h"
 #include "FileInfoResponse.h"
+#include "FileInfoMessage_m.h"
 
 using namespace omnetpp;
 
@@ -40,9 +41,11 @@ public:
     double m_dHeading;
     double m_dUpdateInterval;
 
+    bool inDownload();
+
     void updatePosition();
     FileCache m_cache;
-    std::queue<FileInfoMessage> m_currentRequestList;
+    std::queue<FileInfoMessage*> m_currentRequestList;
 };
 
 #endif
